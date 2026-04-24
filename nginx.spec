@@ -4,7 +4,7 @@
 %define nginx_group nginx
 %define nginx_loggroup adm
 
-%define ngx_openssl_version 1.0.2q
+%define ngx_openssl_version 3.3.2
 
 %define echo_nginx_module_commit c65f5c638d0501b482fbc3ebbda9a49648022d40
 %define headers_more_nginx_module_commit a9f7c7e86cc7441d04e2f11f01c2e3a9c4b0301d
@@ -45,14 +45,12 @@
 %define use_systemd (0%{?fedora} && 0%{?fedora} >= 18) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} == 1315)
 
 %if 0%{?rhel}  == 5
-Group: System Environment/Daemons
 Requires(pre): shadow-utils
 Requires: initscripts >= 8.36
 Requires(post): chkconfig
 %endif
 
 %if 0%{?rhel}  == 6
-Group: System Environment/Daemons
 Requires(pre): shadow-utils
 Requires: initscripts >= 8.36
 Requires(post): chkconfig
@@ -60,7 +58,6 @@ Requires(post): chkconfig
 %endif
 
 %if 0%{?rhel}  == 7
-Group: System Environment/Daemons
 Requires(pre): shadow-utils
 Requires: systemd
 BuildRequires: systemd
@@ -70,7 +67,6 @@ Epoch: 1
 %endif
 
 %if 0%{?suse_version} == 1315
-Group: Productivity/Networking/Web/Servers
 BuildRequires: systemd
 Requires(pre): shadow
 Requires: systemd
@@ -82,8 +78,8 @@ Requires: systemd
 
 Summary: High performance web server
 Name: nginx
-Version: 1.15.7
-Release: 4%{?dist}
+Version: 1.27.4
+Release: 1%{?dist}
 Vendor: CasjaysDev
 URL: http://nginx.org/
 
@@ -134,6 +130,7 @@ Source128: https://github.com/zmartzone/lua-resty-openidc/archive/%{lua_resty_op
 Source129: https://github.com/bungle/lua-resty-session/archive/%{lua_resty_session_commit}.tar.gz#/lua-resty-session.tar.gz
 Source130: https://github.com/cdbattags/lua-resty-jwt/archive/%{lua_resty_jwt_commit}.tar.gz#/lua-resty-jwt.tar.gz
 Source131: https://github.com/jkeys089/lua-resty-hmac/archive/%{lua_resty_hmac_commit}.tar.gz#/lua-resty-hmac.tar.gz
+Source132: default-web-pages.tar.gz
 
 Patch14: ngx_http_secure_download-dynamic_module.patch
 Patch15: ngx_cache_purge-dynamic_module.patch
@@ -145,9 +142,12 @@ Patch20: nginx-1.11.2-ssl_cert_cb_yield.patch
 
 License: 2-clause BSD-like license
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: zlib-devel
+%if 0%{?rhel} >= 8 || 0%{?fedora}
+BuildRequires: pcre2-devel
+%else
 BuildRequires: pcre-devel
+%endif
 BuildRequires: libxml2-devel
 BuildRequires: libxslt-devel
 BuildRequires: gd-devel
@@ -155,6 +155,8 @@ BuildRequires: GeoIP-devel
 BuildRequires: luajit-devel
 BuildRequires: mhash-devel
 BuildRequires: expat-devel
+BuildRequires: perl-devel
+BuildRequires: perl(ExtUtils::Embed)
 
 Provides: webserver
 %if 0%{?rhel}  == 7
@@ -233,6 +235,11 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --group=%{nginx_group} \
         --with-http_ssl_module \
         --with-openssl=./openssl-%{ngx_openssl_version} \
+        --with-openssl-opt="enable-ktls" \
+        --with-http_v2_module \
+%if 0%{?rhel} >= 9 || 0%{?fedora} >= 36
+        --with-http_v3_module \
+%endif
         --with-http_realip_module \
         --with-http_addition_module \
         --with-http_sub_module \
@@ -243,18 +250,25 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --with-http_gzip_static_module \
         --with-http_random_index_module \
         --with-http_secure_link_module \
+        --with-http_degradation_module \
+        --with-http_slice_module \
         --with-http_stub_status_module \
         --with-http_auth_request_module \
+        --with-http_perl_module=dynamic \
         --with-http_xslt_module=dynamic \
         --with-http_image_filter_module=dynamic \
         --with-http_geoip_module=dynamic \
-        --with-threads \
-        --with-stream \
-        --with-stream_ssl_module \
-        --with-http_slice_module \
         --with-mail=dynamic \
         --with-mail_ssl_module \
+        --with-stream \
+        --with-stream_ssl_module \
+        --with-stream_ssl_preread_module \
+        --with-stream_realip_module \
+        --with-threads \
         --with-file-aio \
+        --with-pcre \
+        --with-pcre-jit \
+        --with-compat \
         --add-dynamic-module=./lua-nginx-module \
         --add-dynamic-module=./stream-lua-nginx-module \
         --add-dynamic-module=./headers-more-nginx-module \
@@ -274,7 +288,6 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --add-dynamic-module=./ngx_http_pipelog_module \
         --add-dynamic-module=./nginx-http-shibboleth \
         --with-debug \
-        %{?with_http2:--with-http_v2_module} \
         --with-cc-opt="%{optflags} $(pcre-config --cflags)%{?tcp_fast_open: -DTCP_FASTOPEN=23}" \
         $*
 make %{?_smp_mflags}
@@ -302,6 +315,11 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --group=%{nginx_group} \
         --with-http_ssl_module \
         --with-openssl=./openssl-%{ngx_openssl_version} \
+        --with-openssl-opt="enable-ktls" \
+        --with-http_v2_module \
+%if 0%{?rhel} >= 9 || 0%{?fedora} >= 36
+        --with-http_v3_module \
+%endif
         --with-http_realip_module \
         --with-http_addition_module \
         --with-http_sub_module \
@@ -312,18 +330,25 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --with-http_gzip_static_module \
         --with-http_random_index_module \
         --with-http_secure_link_module \
+        --with-http_degradation_module \
+        --with-http_slice_module \
         --with-http_stub_status_module \
         --with-http_auth_request_module \
+        --with-http_perl_module=dynamic \
         --with-http_xslt_module=dynamic \
         --with-http_image_filter_module=dynamic \
         --with-http_geoip_module=dynamic \
-        --with-threads \
-        --with-stream \
-        --with-stream_ssl_module \
-        --with-http_slice_module \
         --with-mail=dynamic \
         --with-mail_ssl_module \
+        --with-stream \
+        --with-stream_ssl_module \
+        --with-stream_ssl_preread_module \
+        --with-stream_realip_module \
+        --with-threads \
         --with-file-aio \
+        --with-pcre \
+        --with-pcre-jit \
+        --with-compat \
         --add-dynamic-module=./lua-nginx-module \
         --add-dynamic-module=./stream-lua-nginx-module \
         --add-dynamic-module=./headers-more-nginx-module \
@@ -342,7 +367,6 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --add-dynamic-module=./set-misc-nginx-module \
         --add-dynamic-module=./ngx_http_pipelog_module \
         --add-dynamic-module=./nginx-http-shibboleth \
-        %{?with_http2:--with-http_v2_module} \
         --with-cc-opt="%{optflags} $(pcre-config --cflags) %{?tcp_fast_open: -DTCP_FASTOPEN=23}" \
         $*
 make %{?_smp_mflags}
@@ -437,12 +461,11 @@ cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
     %{_builddir}/%{name}-%{version}/nginx-http-shibboleth/includes/shib_fastcgi_params \
     $RPM_BUILD_ROOT%{_sysconfdir}/nginx/
 
-%clean
-%{__rm} -rf $RPM_BUILD_ROOT
+# Install default web pages
+%{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/nginx/html
+tar xzf %{SOURCE132} -C $RPM_BUILD_ROOT%{_datadir}/nginx/html/
 
 %files
-%defattr(-,root,root)
-
 %{_sbindir}/nginx
 %{_sbindir}/nginx-debug
 
@@ -566,6 +589,10 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
+- Update to 1.27.4
+- Modernize spec for EL10
+
 * Fri Nov 30 2018 Hiroaki Nakamura <hnakamur@gmail.com> - 1.15.7-1
 - 1.15.7
 - OpenSSL 1.0.2q
