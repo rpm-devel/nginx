@@ -1,48 +1,48 @@
 #
-%define nginx_home %{_localstatedir}/cache/nginx
-%define nginx_user nginx
-%define nginx_group nginx
-%define nginx_loggroup adm
+%global nginx_home %{_localstatedir}/cache/nginx
+%global nginx_user nginx
+%global nginx_group nginx
+%global nginx_loggroup adm
 
-%define ngx_openssl_version 3.3.2
+%global ngx_openssl_version 3.3.2
 
-%define echo_nginx_module_commit c65f5c638d0501b482fbc3ebbda9a49648022d40
-%define headers_more_nginx_module_commit a9f7c7e86cc7441d04e2f11f01c2e3a9c4b0301d
-%define lua_nginx_module_commit ec0d5768b25044cda99e35ce3413f82c21d4aac1
-%define lua_upstream_nginx_module_commit 6ebcda3c1ee56a73ba73f3a36f5faa7821657115
-%define memc_nginx_module_commit 858fcdcf145ce2cad51cf5c8aa3d5e41a0facac3
-%define redis2_nginx_module_commit c989c829a2877132cb100f901e320921250e068d
-%define set_misc_nginx_module_commit bcfa7a6d0d0fca4dac57d5b45e6064c6fa7f1cae
-%define srcache_nginx_module_commit 53a98806b0a24cc736d11003662e8b769c3e7eb3
-%define lua_resty_core_commit c193534071f4f2e8335839961728e51c7c248d6a
-%define stream_lua_nginx_module_commit 88bec0b375b88224f438f2435648a6c5f44bc6b9
-%define lua_resty_string_commit 945b7d67422e8ceb6013cf84d8603c47713a8a02
-%define lua_resty_lrucache_commit d02dddc97953864eed537246f57aa8f537782ef9
-%define lua_resty_cookie_commit 3edcd960ba9e3b2154cd3a24bf3e12f3a2a598a6
-%define lua_resty_openidc_commit 7e0cebd13def44cc39e433c5a86db8e9cf70fa3c
-%define lua_resty_session_commit 4429a06ffac1724a056fafa954c0394d437b261f
-%define lua_resty_jwt_commit f17d7c6ed45d59beb9fbf3bd5f50e89ead395b98
-%define lua_resty_hmac_commit 989f601acbe74dee71c1a48f3e140a427f2d03ae
-%define lua_resty_http_commit e5deba5bde1db31adc7aad574bae5e89f83fd973
-%define ngx_cache_purge_commit 331fe43e8d9a3d1fa5e0c9fec7d3201d431a9177
-%define nginx_rtmp_module_commit 791b6136f02bc9613daf178723ac09f4df5a3bbf
-%define nginx_dav_ext_module_commit 430fd774fe838a04f1a5defbf1dd571d42300cf9
-%define ngx_http_enhanced_memcached_module_commit b58a4500db3c4ee274be54a18abc767219dcfd36
-%define ngx_http_secure_download_commit f379a1acf2a76f63431a12fa483d9e22e718400b
-%define ngx_devel_kit_commit a22dade76c838e5f377d58d007f65d35b5ce1df3
-%define nginx_sorted_querystring_module_commit e5bbded07fd67e2977edc2bc145c45a7b3fc4d26
-%define ngx_http_pipelog_module_commit 68b5f4b6553e1588c42d2cf021aa8b5f7bf268fb
-%define nginx_http_shibboleth_commit 9fddcf9e5a71ffb65376af18ad4435194b473487
-%define nginx_lua_saml_service_provider_commit 90b79233bfc28dd48ad8f2d38a8d547d182f1a62
-%define nginx_lua_session_commit 00cfbbf018c6b8b74614e6fe3dc350b29a5c6ae8
-%define lua_ffi_zlib_commit 3d6dbee710b4712b8d0e0235425abee04a22b1bd
-%define SLAXML_commit b7f376997e720d0deb7d0e1e4803c9f264c239de
+%global echo_nginx_module_commit c65f5c638d0501b482fbc3ebbda9a49648022d40
+%global headers_more_nginx_module_commit a9f7c7e86cc7441d04e2f11f01c2e3a9c4b0301d
+%global lua_nginx_module_commit ec0d5768b25044cda99e35ce3413f82c21d4aac1
+%global lua_upstream_nginx_module_commit 6ebcda3c1ee56a73ba73f3a36f5faa7821657115
+%global memc_nginx_module_commit 858fcdcf145ce2cad51cf5c8aa3d5e41a0facac3
+%global redis2_nginx_module_commit c989c829a2877132cb100f901e320921250e068d
+%global set_misc_nginx_module_commit bcfa7a6d0d0fca4dac57d5b45e6064c6fa7f1cae
+%global srcache_nginx_module_commit 53a98806b0a24cc736d11003662e8b769c3e7eb3
+%global lua_resty_core_commit c193534071f4f2e8335839961728e51c7c248d6a
+%global stream_lua_nginx_module_commit 88bec0b375b88224f438f2435648a6c5f44bc6b9
+%global lua_resty_string_commit 945b7d67422e8ceb6013cf84d8603c47713a8a02
+%global lua_resty_lrucache_commit d02dddc97953864eed537246f57aa8f537782ef9
+%global lua_resty_cookie_commit 3edcd960ba9e3b2154cd3a24bf3e12f3a2a598a6
+%global lua_resty_openidc_commit 7e0cebd13def44cc39e433c5a86db8e9cf70fa3c
+%global lua_resty_session_commit 4429a06ffac1724a056fafa954c0394d437b261f
+%global lua_resty_jwt_commit f17d7c6ed45d59beb9fbf3bd5f50e89ead395b98
+%global lua_resty_hmac_commit 989f601acbe74dee71c1a48f3e140a427f2d03ae
+%global lua_resty_http_commit e5deba5bde1db31adc7aad574bae5e89f83fd973
+%global ngx_cache_purge_commit 331fe43e8d9a3d1fa5e0c9fec7d3201d431a9177
+%global nginx_rtmp_module_commit 791b6136f02bc9613daf178723ac09f4df5a3bbf
+%global nginx_dav_ext_module_commit 430fd774fe838a04f1a5defbf1dd571d42300cf9
+%global ngx_http_enhanced_memcached_module_commit b58a4500db3c4ee274be54a18abc767219dcfd36
+%global ngx_http_secure_download_commit f379a1acf2a76f63431a12fa483d9e22e718400b
+%global ngx_devel_kit_commit a22dade76c838e5f377d58d007f65d35b5ce1df3
+%global nginx_sorted_querystring_module_commit e5bbded07fd67e2977edc2bc145c45a7b3fc4d26
+%global ngx_http_pipelog_module_commit 68b5f4b6553e1588c42d2cf021aa8b5f7bf268fb
+%global nginx_http_shibboleth_commit 9fddcf9e5a71ffb65376af18ad4435194b473487
+%global nginx_lua_saml_service_provider_commit 90b79233bfc28dd48ad8f2d38a8d547d182f1a62
+%global nginx_lua_session_commit 00cfbbf018c6b8b74614e6fe3dc350b29a5c6ae8
+%global lua_ffi_zlib_commit 3d6dbee710b4712b8d0e0235425abee04a22b1bd
+%global SLAXML_commit b7f376997e720d0deb7d0e1e4803c9f264c239de
 
-%define luajit_inc /usr/include/luajit-2.0
-%define luajit_lib /usr/lib64
+%global luajit_inc /usr/include/luajit-2.0
+%global luajit_lib /usr/lib64
 
 # distribution specific definitions
-%define use_systemd (0%{?fedora} && 0%{?fedora} >= 18) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} == 1315)
+%global use_systemd (0%{?fedora} && 0%{?fedora} >= 18) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} == 1315)
 
 %if 0%{?rhel}  == 5
 Requires(pre): shadow-utils
@@ -372,98 +372,98 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
 make %{?_smp_mflags}
 
 %install
-%{__rm} -rf $RPM_BUILD_ROOT
-%{__make} DESTDIR=$RPM_BUILD_ROOT install
+%{__rm} -rf %{buildroot}
+%{__make} DESTDIR=%{buildroot} install
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/nginx
-%{__mv} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/html $RPM_BUILD_ROOT%{_datadir}/nginx/
+%{__mkdir} -p %{buildroot}%{_datadir}/nginx
+%{__mv} %{buildroot}%{_sysconfdir}/nginx/html %{buildroot}%{_datadir}/nginx/
 
-%{__rm} -f $RPM_BUILD_ROOT%{_sysconfdir}/nginx/*.default
-%{__rm} -f $RPM_BUILD_ROOT%{_sysconfdir}/nginx/fastcgi.conf
+%{__rm} -f %{buildroot}%{_sysconfdir}/nginx/*.default
+%{__rm} -f %{buildroot}%{_sysconfdir}/nginx/fastcgi.conf
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_localstatedir}/log/nginx
-%{__mkdir} -p $RPM_BUILD_ROOT%{_localstatedir}/run/nginx
-%{__mkdir} -p $RPM_BUILD_ROOT%{_localstatedir}/cache/nginx
+%{__mkdir} -p %{buildroot}%{_localstatedir}/log/nginx
+%{__mkdir} -p %{buildroot}%{_localstatedir}/run/nginx
+%{__mkdir} -p %{buildroot}%{_localstatedir}/cache/nginx
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_libdir}/nginx/modules
-cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
+%{__mkdir} -p %{buildroot}%{_libdir}/nginx/modules
+cd %{buildroot}%{_sysconfdir}/nginx && \
     %{__ln_s} ../..%{_libdir}/nginx/modules modules && cd -
-%{__mkdir} -p $RPM_BUILD_ROOT%{_libdir}/nginx/modules-debug
-cd $RPM_BUILD_ROOT%{_sysconfdir}/nginx && \
+%{__mkdir} -p %{buildroot}%{_libdir}/nginx/modules-debug
+cd %{buildroot}%{_sysconfdir}/nginx && \
     %{__ln_s} ../..%{_libdir}/nginx/modules-debug modules-debug && cd -
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-core/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-cookie/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-http/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-string/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-lrucache/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-openidc/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-session/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-jwt/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-hmac/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/nginx-lua-saml-service-provider/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/nginx-lua-session/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-ffi-zlib/lib/* $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
-%{__cp} -pr %{_builddir}/%{name}-%{version}/SLAXML/*.lua $RPM_BUILD_ROOT%{_prefix}/lib/nginx/lua
+%{__mkdir} -p %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-core/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-cookie/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-http/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-string/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-lrucache/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-openidc/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-session/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-jwt/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-resty-hmac/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/nginx-lua-saml-service-provider/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/nginx-lua-session/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/lua-ffi-zlib/lib/* %{buildroot}%{_prefix}/lib/nginx/lua
+%{__cp} -pr %{_builddir}/%{name}-%{version}/SLAXML/*.lua %{buildroot}%{_prefix}/lib/nginx/lua
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{version}
+%{__mkdir} -p %{buildroot}%{_datadir}/doc/%{name}-%{version}
 %{__install} -m 644 -p %{SOURCE12} \
-    $RPM_BUILD_ROOT%{_datadir}/doc/%{name}-%{version}/
+    %{buildroot}%{_datadir}/doc/%{name}-%{version}/
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/nginx/conf.d
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/nginx.conf
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/nginx/conf.d
+%{__rm} %{buildroot}%{_sysconfdir}/nginx/nginx.conf
 %{__install} -m 644 -p %{SOURCE4} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/nginx/nginx.conf
+    %{buildroot}%{_sysconfdir}/nginx/nginx.conf
 %{__install} -m 644 -p %{SOURCE5} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/nginx/conf.d/default.conf
+    %{buildroot}%{_sysconfdir}/nginx/conf.d/default.conf
 
-%{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/sysconfig
 %{__install} -m 644 -p %{SOURCE3} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/nginx
+    %{buildroot}%{_sysconfdir}/sysconfig/nginx
 %{__install} -m 644 -p %{SOURCE7} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/nginx-debug
+    %{buildroot}%{_sysconfdir}/sysconfig/nginx-debug
 
 %if %{use_systemd}
 # install systemd-specific files
-%{__mkdir} -p $RPM_BUILD_ROOT%{_unitdir}
+%{__mkdir} -p %{buildroot}%{_unitdir}
 %{__install} -m644 %SOURCE8 \
-    $RPM_BUILD_ROOT%{_unitdir}/nginx.service
+    %{buildroot}%{_unitdir}/nginx.service
 %{__install} -m644 %SOURCE11 \
-    $RPM_BUILD_ROOT%{_unitdir}/nginx-debug.service
-%{__mkdir} -p $RPM_BUILD_ROOT%{_libexecdir}/initscripts/legacy-actions/nginx
+    %{buildroot}%{_unitdir}/nginx-debug.service
+%{__mkdir} -p %{buildroot}%{_libexecdir}/initscripts/legacy-actions/nginx
 %{__install} -m755 %SOURCE9 \
-    $RPM_BUILD_ROOT%{_libexecdir}/initscripts/legacy-actions/nginx/upgrade
+    %{buildroot}%{_libexecdir}/initscripts/legacy-actions/nginx/upgrade
 %else
 # install SYSV init stuff
-%{__mkdir} -p $RPM_BUILD_ROOT%{_initrddir}
-%{__install} -m755 nginx.init $RPM_BUILD_ROOT%{_initrddir}/nginx
-%{__install} -m755 nginx-debug.init $RPM_BUILD_ROOT%{_initrddir}/nginx-debug
+%{__mkdir} -p %{buildroot}%{_initrddir}
+%{__install} -m755 nginx.init %{buildroot}%{_initrddir}/nginx
+%{__install} -m755 nginx-debug.init %{buildroot}%{_initrddir}/nginx-debug
 %endif
 
 # install log rotation stuff
-%{__mkdir} -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/logrotate.d
 %if 0%{?suse_version}
 %{__install} -m 644 -p %{SOURCE10} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/nginx
+    %{buildroot}%{_sysconfdir}/logrotate.d/nginx
 %else
 %{__install} -m 644 -p %{SOURCE1} \
-    $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/nginx
+    %{buildroot}%{_sysconfdir}/logrotate.d/nginx
 %endif
 
 %{__install} -m755 %{_builddir}/%{name}-%{version}/objs/nginx-debug \
-    $RPM_BUILD_ROOT%{_sbindir}/nginx-debug
+    %{buildroot}%{_sbindir}/nginx-debug
 %{__install} -m755 %{_builddir}/%{name}-%{version}/objs-debug/*.so \
-    $RPM_BUILD_ROOT%{_libdir}/nginx/modules-debug/
+    %{buildroot}%{_libdir}/nginx/modules-debug/
 
 %{__install} -m644 \
     %{_builddir}/%{name}-%{version}/nginx-http-shibboleth/includes/shib_clear_headers \
     %{_builddir}/%{name}-%{version}/nginx-http-shibboleth/includes/shib_fastcgi_params \
-    $RPM_BUILD_ROOT%{_sysconfdir}/nginx/
+    %{buildroot}%{_sysconfdir}/nginx/
 
 # Install default web pages
-%{__mkdir} -p $RPM_BUILD_ROOT%{_datadir}/nginx/html
-tar xzf %{SOURCE132} -C $RPM_BUILD_ROOT%{_datadir}/nginx/html/
+%{__mkdir} -p %{buildroot}%{_datadir}/nginx/html
+tar xzf %{SOURCE132} -C %{buildroot}%{_datadir}/nginx/html/
 
 %files
 %{_sbindir}/nginx
@@ -589,6 +589,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Fri May 22 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
+- Fix spec violations: %global for constants, use %{buildroot}
+
 * Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
 - Update to 1.27.4
 - Modernize spec for EL10
