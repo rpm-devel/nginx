@@ -41,49 +41,15 @@
 %global luajit_inc /usr/include/luajit-2.0
 %global luajit_lib /usr/lib64
 
-# distribution specific definitions
-%global use_systemd (0%{?fedora} && 0%{?fedora} >= 18) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} == 1315)
-
-%if 0%{?rhel}  == 5
-Requires(pre): shadow-utils
-Requires: initscripts >= 8.36
-Requires(post): chkconfig
-%endif
-
-%if 0%{?rhel}  == 6
-Requires(pre): shadow-utils
-Requires: initscripts >= 8.36
-Requires(post): chkconfig
-%define with_http2 1
-%endif
-
-%if 0%{?rhel}  == 7
-Requires(pre): shadow-utils
-Requires: systemd
-BuildRequires: systemd
-Epoch: 1
-%define tcp_fast_open 1
-%define with_http2 1
-%endif
-
-%if 0%{?suse_version} == 1315
-BuildRequires: systemd
-Requires(pre): shadow
-Requires: systemd
-%define with_http2 1
-%define nginx_loggroup trusted
-%endif
-
-# end of distribution specific definitions
-
 Summary: High performance web server
 Name: nginx
-Version: 1.27.4
+Version: 1.30.3
 Release: 1%{?dist}
 Vendor: CasjaysDev
-URL: http://nginx.org/
+URL: https://nginx.org/
+ExclusiveArch: x86_64 aarch64
 
-Source0: http://nginx.org/download/%{name}-%{version}.tar.gz
+Source0: https://nginx.org/download/%{name}-%{version}.tar.gz
 Source1: logrotate
 Source2: nginx.init.in
 Source3: nginx.sysconf
@@ -140,14 +106,13 @@ Patch18: ngx_cache_purge-feat_purge_partial_keys.patch
 Patch19: ngx_cache_purge-select_response_type.patch
 Patch20: nginx-1.11.2-ssl_cert_cb_yield.patch
 
-License: 2-clause BSD-like license
+License: BSD-2-Clause
 
+BuildRequires: systemd-rpm-macros
+Requires(pre): shadow-utils
+%{?systemd_requires}
 BuildRequires: zlib-devel
-%if 0%{?rhel} >= 8 || 0%{?fedora}
 BuildRequires: pcre2-devel
-%else
-BuildRequires: pcre-devel
-%endif
 BuildRequires: libxml2-devel
 BuildRequires: libxslt-devel
 BuildRequires: gd-devel
@@ -159,23 +124,6 @@ BuildRequires: perl-devel
 BuildRequires: perl(ExtUtils::Embed)
 
 Provides: webserver
-%if 0%{?rhel}  == 7
-Provides:          nginx-all-modules = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-http-geoip = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-http-image-filter = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-http-perl = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-http-xslt-filter = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-mail = %{epoch}:%{version}-%{release}
-Provides:          nginx-mod-stream = %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-all-modules < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-http-geoip < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-http-image-filter < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-http-perl < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-http-xslt-filter < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-mail < %{epoch}:%{version}-%{release}
-Obsoletes:         nginx-mod-stream < %{epoch}:%{version}-%{release}
-%endif
-
 Provides:          nginx-all-modules = %{version}-%{release}
 Provides:          nginx-mod-http-geoip = %{version}-%{release}
 Provides:          nginx-mod-http-image-filter = %{version}-%{release}
@@ -196,10 +144,6 @@ Obsoletes:         nginx-mod-stream < %{version}-%{release}
 nginx [engine x] is an HTTP and reverse proxy server, as well as
 a mail proxy server.
 
-%if 0%{?suse_version} == 1315
-%debug_package
-%endif
-
 %prep
 %setup -q -a 100 -a 101 -a 102 -a 103 -a 104 -a 105 -a 106 -a 107 -a 108 -a 109 -a 110 -a 111 -a 112 -a 113 -a 114 -a 115 -a 116 -a 117 -a 118 -a 119 -a 120 -a 121 -a 122 -a 123 -a 124 -a 125 -a 126 -a 127 -a 128 -a 129 -a 130 -a 131
 %patch14 -p1
@@ -209,12 +153,6 @@ a mail proxy server.
 %patch18 -p1
 %patch19 -p1
 %patch20 -p1
-cp %{SOURCE2} .
-sed -e 's|%%DEFAULTSTART%%|2 3 4 5|g' -e 's|%%DEFAULTSTOP%%|0 1 6|g' \
-    -e 's|%%PROVIDES%%|nginx|g' < %{SOURCE2} > nginx.init
-sed -e 's|%%DEFAULTSTART%%||g' -e 's|%%DEFAULTSTOP%%|0 1 2 3 4 5 6|g' \
-    -e 's|%%PROVIDES%%|nginx-debug|g' < %{SOURCE2} > nginx-debug.init
-
 %build
 LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
 ./configure \
@@ -290,7 +228,7 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --with-debug \
         --with-cc-opt="%{optflags} $(pcre-config --cflags)%{?tcp_fast_open: -DTCP_FASTOPEN=23}" \
         $*
-make %{?_smp_mflags}
+%make_build
 %{__mv} %{_builddir}/%{name}-%{version}/objs/nginx \
         %{_builddir}/%{name}-%{version}/objs/nginx-debug
 %{__mkdir} %{_builddir}/%{name}-%{version}/objs-debug
@@ -369,11 +307,10 @@ LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
         --add-dynamic-module=./nginx-http-shibboleth \
         --with-cc-opt="%{optflags} $(pcre-config --cflags) %{?tcp_fast_open: -DTCP_FASTOPEN=23}" \
         $*
-make %{?_smp_mflags}
+%make_build
 
 %install
-%{__rm} -rf %{buildroot}
-%{__make} DESTDIR=%{buildroot} install
+%make_install
 
 %{__mkdir} -p %{buildroot}%{_datadir}/nginx
 %{__mv} %{buildroot}%{_sysconfdir}/nginx/html %{buildroot}%{_datadir}/nginx/
@@ -424,7 +361,6 @@ cd %{buildroot}%{_sysconfdir}/nginx && \
 %{__install} -m 644 -p %{SOURCE7} \
     %{buildroot}%{_sysconfdir}/sysconfig/nginx-debug
 
-%if %{use_systemd}
 # install systemd-specific files
 %{__mkdir} -p %{buildroot}%{_unitdir}
 %{__install} -m644 %SOURCE8 \
@@ -434,22 +370,11 @@ cd %{buildroot}%{_sysconfdir}/nginx && \
 %{__mkdir} -p %{buildroot}%{_libexecdir}/initscripts/legacy-actions/nginx
 %{__install} -m755 %SOURCE9 \
     %{buildroot}%{_libexecdir}/initscripts/legacy-actions/nginx/upgrade
-%else
-# install SYSV init stuff
-%{__mkdir} -p %{buildroot}%{_initrddir}
-%{__install} -m755 nginx.init %{buildroot}%{_initrddir}/nginx
-%{__install} -m755 nginx-debug.init %{buildroot}%{_initrddir}/nginx-debug
-%endif
 
 # install log rotation stuff
 %{__mkdir} -p %{buildroot}%{_sysconfdir}/logrotate.d
-%if 0%{?suse_version}
-%{__install} -m 644 -p %{SOURCE10} \
-    %{buildroot}%{_sysconfdir}/logrotate.d/nginx
-%else
 %{__install} -m 644 -p %{SOURCE1} \
     %{buildroot}%{_sysconfdir}/logrotate.d/nginx
-%endif
 
 %{__install} -m755 %{_builddir}/%{name}-%{version}/objs/nginx-debug \
     %{buildroot}%{_sbindir}/nginx-debug
@@ -489,15 +414,10 @@ tar xzf %{SOURCE132} -C %{buildroot}%{_datadir}/nginx/html/
 %config(noreplace) %{_sysconfdir}/logrotate.d/nginx
 %config(noreplace) %{_sysconfdir}/sysconfig/nginx
 %config(noreplace) %{_sysconfdir}/sysconfig/nginx-debug
-%if %{use_systemd}
 %{_unitdir}/nginx.service
 %{_unitdir}/nginx-debug.service
 %dir %{_libexecdir}/initscripts/legacy-actions/nginx
 %{_libexecdir}/initscripts/legacy-actions/nginx/*
-%else
-%{_initrddir}/nginx
-%{_initrddir}/nginx-debug
-%endif
 
 %attr(0755,root,root) %dir %{_libdir}/nginx
 %attr(0755,root,root) %dir %{_libdir}/nginx/modules
@@ -525,15 +445,9 @@ getent passwd %{nginx_user} >/dev/null || \
 exit 0
 
 %post
-# Register the nginx service
+%systemd_post nginx.service
+%systemd_post nginx-debug.service
 if [ $1 -eq 1 ]; then
-%if %{use_systemd}
-    /usr/bin/systemctl preset nginx.service >/dev/null 2>&1 ||:
-    /usr/bin/systemctl preset nginx-debug.service >/dev/null 2>&1 ||:
-%else
-    /sbin/chkconfig --add nginx
-    /sbin/chkconfig --add nginx-debug
-%endif
     # print site info
     cat <<BANNER
 ----------------------------------------------------------------------
@@ -567,21 +481,11 @@ BANNER
 fi
 
 %preun
-if [ $1 -eq 0 ]; then
-%if %use_systemd
-    /usr/bin/systemctl --no-reload disable nginx.service >/dev/null 2>&1 ||:
-    /usr/bin/systemctl stop nginx.service >/dev/null 2>&1 ||:
-%else
-    /sbin/service nginx stop > /dev/null 2>&1
-    /sbin/chkconfig --del nginx
-    /sbin/chkconfig --del nginx-debug
-%endif
-fi
+%systemd_preun nginx.service
+%systemd_preun nginx-debug.service
 
 %postun
-%if %use_systemd
-/usr/bin/systemctl daemon-reload >/dev/null 2>&1 ||:
-%endif
+%systemd_postun
 if [ $1 -ge 1 ]; then
     /sbin/service nginx status  >/dev/null 2>&1 || exit 0
     /sbin/service nginx upgrade >/dev/null 2>&1 || echo \
@@ -589,12 +493,16 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
-* Fri May 22 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
-- Fix spec violations: %global for constants, use %{buildroot}
+* Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-1
+- Update to 1.30.3 (stable; verified https://nginx.org/download/nginx-1.30.3.tar.gz)
+- URL + Source0: http → https
+- Remove dead EL5/EL6/EL7/SUSE conditionals (targeting EL8+ only)
+- Drop EL8+ guard around pcre2-devel BuildRequires (always true on EL8+)
+- Remove %if %{use_systemd} / SYSV fallback branches (systemd only)
+- Remove SUSE logrotate branch; remove SUSE %debug_package block
 
 * Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
-- Update to 1.27.4
-- Modernize spec for EL10
+- SPDX: BSD-2-Clause; ExclusiveArch: x86_64 aarch64; modernize for EL10
 
 * Fri Nov 30 2018 Hiroaki Nakamura <hnakamur@gmail.com> - 1.15.7-1
 - 1.15.7
