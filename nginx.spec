@@ -41,6 +41,18 @@
 %global luajit_inc /usr/include/luajit-2.0
 %global luajit_lib /usr/lib64
 
+%if 0%{?suse_version}
+%global shadow_pkg shadow
+%global geoip_devel_pkg libGeoIP-devel
+%global expat_devel_pkg libexpat-devel
+%global luajit_devel_pkg lua51-luajit-devel
+%else
+%global shadow_pkg shadow-utils
+%global geoip_devel_pkg GeoIP-devel
+%global expat_devel_pkg expat-devel
+%global luajit_devel_pkg luajit-devel
+%endif
+
 Summary: High performance web server
 Name: nginx
 Version: 1.30.3
@@ -109,17 +121,17 @@ Patch20: nginx-1.11.2-ssl_cert_cb_yield.patch
 License: BSD-2-Clause
 
 BuildRequires: systemd-rpm-macros
-Requires(pre): shadow-utils
+Requires(pre): %{shadow_pkg}
 %{?systemd_requires}
 BuildRequires: zlib-devel
 BuildRequires: pcre2-devel
 BuildRequires: libxml2-devel
 BuildRequires: libxslt-devel
 BuildRequires: gd-devel
-BuildRequires: GeoIP-devel
-BuildRequires: luajit-devel
+BuildRequires: %{geoip_devel_pkg}
+BuildRequires: %{luajit_devel_pkg}
 BuildRequires: mhash-devel
-BuildRequires: expat-devel
+BuildRequires: %{expat_devel_pkg}
 BuildRequires: perl-devel
 BuildRequires: perl(ExtUtils::Embed)
 
@@ -494,6 +506,18 @@ fi
 
 %changelog
 * Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-1
+- Multi-distro: guard shadow-utils/shadow, GeoIP-devel/libGeoIP-devel,
+  expat-devel/libexpat-devel, and luajit-devel/lua51-luajit-devel behind
+  %if 0%{?suse_version} (SUSE renamed/relocated these packages; verified
+  via openSUSE package search and SUSE Package Hub)
+- Left pcre2-devel, zlib-devel, libxml2-devel, libxslt-devel, gd-devel,
+  mhash-devel, and perl-devel unguarded: pcre2-devel/zlib-devel/
+  libxml2-devel/libxslt-devel/gd-devel confirmed identical on openSUSE;
+  mhash-devel and perl-devel could not be confirmed to have a distinct,
+  reliable SUSE replacement name (mhash is a legacy/abandoned library
+  with inconsistent SUSE packaging, and ExtUtils::Embed ships in core
+  perl on SUSE rather than a separate perl-devel subpackage) so left
+  as-is per verify-before-guarding policy
 - Update to 1.30.3 (stable; verified https://nginx.org/download/nginx-1.30.3.tar.gz)
 - URL + Source0: http → https
 - Remove dead EL5/EL6/EL7/SUSE conditionals (targeting EL8+ only)
