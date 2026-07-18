@@ -155,6 +155,41 @@ build/
 dist/
 out/
 
+# Downloaded upstream sources (fetched by spectool/rpmbuild.sh, never committed)
+nginx-*.tar.gz
+openssl-*.tar.gz
+lua-nginx-module.tar.gz
+headers-more-nginx-module.tar.gz
+stream-lua-nginx-module.tar.gz
+nginx-http-shibboleth.tar.gz
+nginx-sorted-querystring-module.tar.gz
+nginx-rtmp-module.tar.gz
+ngx_cache_purge.tar.gz
+ngx_http_secure_download.tar.gz
+lua-resty-cookie.tar.gz
+srcache-nginx-module.tar.gz
+redis2-nginx-module.tar.gz
+memc-nginx-module.tar.gz
+lua-upstream-nginx-module.tar.gz
+echo-nginx-module.tar.gz
+ngx_http_enhanced_memcached_module.tar.gz
+nginx-dav-ext-module.tar.gz
+ngx_devel_kit.tar.gz
+set-misc-nginx-module.tar.gz
+ngx_http_pipelog_module.tar.gz
+lua-resty-core.tar.gz
+lua-resty-http.tar.gz
+lua-resty-string.tar.gz
+nginx-lua-saml-service-provider.tar.gz
+nginx-lua-session.tar.gz
+lua-ffi-zlib.tar.gz
+SLAXML.tar.gz
+lua-resty-lrucache.tar.gz
+lua-resty-openidc.tar.gz
+lua-resty-session.tar.gz
+lua-resty-jwt.tar.gz
+lua-resty-hmac.tar.gz
+
 # Rust
 target/
 
