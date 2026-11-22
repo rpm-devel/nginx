@@ -56,7 +56,7 @@
 Summary: High performance web server
 Name: nginx
 Version: 1.30.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Vendor: CasjaysDev
 URL: https://nginx.org/
 ExclusiveArch: x86_64 aarch64
@@ -507,6 +507,9 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
+* Sat Nov 21 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-3
+- Escape a macro in changelog text that EL8 rpm expanded into a duplicate debuginfo package
+
 * Fri Oct 02 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-2
 - Use current RPM patch syntax and clarify changelog condition wording
 
@@ -528,7 +531,7 @@ fi
 - Remove dead EL5/EL6/EL7/SUSE conditionals (targeting EL8+ only)
 - Drop EL8+ guard around pcre2-devel BuildRequires (always true on EL8+)
 - Remove %if %{use_systemd} / SYSV fallback branches (systemd only)
-- Remove SUSE logrotate branch; remove SUSE %debug_package block
+- Remove SUSE logrotate branch; remove SUSE %%debug_package block
 
 * Fri Apr 24 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.27.4-1
 - SPDX: BSD-2-Clause; ExclusiveArch: x86_64 aarch64; modernize for EL10
