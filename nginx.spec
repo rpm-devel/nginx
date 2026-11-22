@@ -56,7 +56,7 @@
 Summary: High performance web server
 Name: nginx
 Version: 1.30.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Vendor: CasjaysDev
 URL: https://nginx.org/
 ExclusiveArch: x86_64 aarch64
@@ -93,7 +93,7 @@ Source115: https://github.com/arut/nginx-dav-ext-module/archive/%{nginx_dav_ext_
 Source116: https://github.com/simplresty/ngx_devel_kit/archive/%{ngx_devel_kit_commit}.tar.gz#/ngx_devel_kit.tar.gz
 Source117: https://github.com/openresty/set-misc-nginx-module/archive/%{set_misc_nginx_module_commit}.tar.gz#/set-misc-nginx-module.tar.gz
 Source118: https://github.com/pandax381/ngx_http_pipelog_module/archive/%{ngx_http_pipelog_module_commit}.tar.gz#/ngx_http_pipelog_module.tar.gz
-Source119: https://github.com/openresty/lua-resty-core/archive/%{lua_nginx_module_commit}.tar.gz#/lua-resty-core.tar.gz
+Source119: https://github.com/openresty/lua-resty-core/archive/%{lua_resty_core_commit}.tar.gz#/lua-resty-core.tar.gz
 
 Source120: https://openssl.org/source/openssl-%{ngx_openssl_version}.tar.gz
 
@@ -158,13 +158,15 @@ a mail proxy server.
 
 %prep
 %setup -q -a 100 -a 101 -a 102 -a 103 -a 104 -a 105 -a 106 -a 107 -a 108 -a 109 -a 110 -a 111 -a 112 -a 113 -a 114 -a 115 -a 116 -a 117 -a 118 -a 119 -a 120 -a 121 -a 122 -a 123 -a 124 -a 125 -a 126 -a 127 -a 128 -a 129 -a 130 -a 131
-%patch14 -p1
-%patch15 -p1
-%patch16 -p1
-%patch17 -p1
-%patch18 -p1
-%patch19 -p1
-%patch20 -p1
+mv ngx_cache_purge-%{ngx_cache_purge_commit} ngx_cache_purge
+mv ngx_http_secure_download-%{ngx_http_secure_download_commit} ngx_http_secure_download
+%patch -P 14 -p1
+%patch -P 15 -p1
+%patch -P 16 -p1
+%patch -P 17 -p1
+%patch -P 18 -p1
+%patch -P 19 -p1
+%patch -P 20 -p1
 %build
 LUAJIT_INC=%{luajit_inc} LUAJIT_LIB=%{luajit_lib} \
 ./configure \
@@ -497,7 +499,7 @@ fi
 %systemd_preun nginx-debug.service
 
 %postun
-%systemd_postun
+%systemd_postun nginx.service nginx-debug.service
 if [ $1 -ge 1 ]; then
     /sbin/service nginx status  >/dev/null 2>&1 || exit 0
     /sbin/service nginx upgrade >/dev/null 2>&1 || echo \
@@ -505,10 +507,13 @@ if [ $1 -ge 1 ]; then
 fi
 
 %changelog
-* Sat Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-1
+* Fri Oct 02 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-2
+- Use current RPM patch syntax and clarify changelog condition wording
+
+* Sun Jul 05 2026 CasjaysDev <rpm-devel@casjaysdev.pro> - 1.30.3-1
 - Multi-distro: guard shadow-utils/shadow, GeoIP-devel/libGeoIP-devel,
   expat-devel/libexpat-devel, and luajit-devel/lua51-luajit-devel behind
-  %if 0%{?suse_version} (SUSE renamed/relocated these packages; verified
+  a SUSE-specific conditional (SUSE renamed/relocated these packages; verified
   via openSUSE package search and SUSE Package Hub)
 - Left pcre2-devel, zlib-devel, libxml2-devel, libxslt-devel, gd-devel,
   mhash-devel, and perl-devel unguarded: pcre2-devel/zlib-devel/
